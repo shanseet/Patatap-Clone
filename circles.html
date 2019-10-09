@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="circles.css">
+    <title>Sound Circles</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/howler/2.1.2/howler.min.js"></script>
+    <script src="paper-full.js"></script>
+    <script src="data.js"></script>
+    <script type="text/paperscript" canvas="myCanvas">
+
+        var circles = [];
+        function onKeyDown(event) {
+            if (data[event.key]) {
+                var newCircle = new Path.Circle(new Point(view.size) * Point.random(), 300);
+                newCircle.fillColor = data[event.key].color;
+                circles.push(newCircle);
+                data[event.key].sound.play();
+            }
+        }
+
+        function onFrame(event) {
+            circles.forEach(function(circle, i){
+                circle.fillColor.hue+=1;
+                circle.scale(0.91);
+                if (circle.area<1) {
+                    circle.remove();
+                    circles.splice(i, 1);
+                }
+           })
+        }
+
+    </script>
+</head>
+<body>
+    <canvas id="myCanvas" resize></canvas>
+</body>
+</html>
