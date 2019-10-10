@@ -11,6 +11,18 @@
     <script src="data.js"></script>
     <script type="text/paperscript" canvas="myCanvas">
 
+        var welcomeText = new PointText(view.center);
+        var startFading = false;
+        var fadeTime = 0;
+        welcomeText.content = 'Press any letter key to make music!';
+        welcomeText.opacity = 1;
+        welcomeText.style = {
+            fontFamily: 'Verdana',
+            fontSize: 24,
+            fillColor: '#E53E4D',
+            justification: 'center'
+        };
+
         var circles = [];
         function onKeyDown(event) {
             if (data[event.key]) {
@@ -18,6 +30,9 @@
                 newCircle.fillColor = data[event.key].color;
                 circles.push(newCircle);
                 data[event.key].sound.play();
+            }
+            if (welcomeText.opacity == 1.0) {
+                startFading = true;
             }
         }
 
@@ -30,6 +45,16 @@
                     circles.splice(i, 1);
                 }
            })
+           if (startFading) {
+               welcomeText.opacity -= 0.009;
+               if (fadeTime<100) {
+               fadeTime++;
+                } else {
+                    welcomeText.opacity = 0;
+                    startFading = false;
+                }
+           }
+           
         }
 
     </script>
